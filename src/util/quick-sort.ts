@@ -4,11 +4,21 @@ function swap(arr: number[], i: number, j: number) {
   [arr[i], arr[j]] = [arr[j], arr[i]];
 }
 
+function medianOfThree(arr: number[], low: number, high: number): number {
+  const mid = Math.floor((low + high) / 2);
+  if (arr[low] > arr[mid]) swap(arr, low, mid);
+  if (arr[low] > arr[high]) swap(arr, low, high);
+  if (arr[mid] > arr[high]) swap(arr, mid, high);
+  return mid;
+}
+
 function* partition(
   arr: number[],
   low: number,
   high: number,
 ): Generator<UpdateArrayParams, number, void> {
+  const pivotIndex = medianOfThree(arr, low, high);
+  swap(arr, pivotIndex, high);
   const pivot = arr[high];
   let i = low - 1;
 
