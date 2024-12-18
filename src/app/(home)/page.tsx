@@ -23,7 +23,7 @@ const Home = () => {
       <div className='flex w-60 flex-col items-center gap-y-4'>
         <Slider
           defaultValue={[speed]}
-          max={200}
+          max={400}
           min={10}
           step={10}
           onValueChange={([value]) => {

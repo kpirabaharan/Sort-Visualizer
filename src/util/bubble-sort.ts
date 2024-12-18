@@ -1,4 +1,8 @@
-export function* bubbleSort(array: number[]) {
+import { UpdateArrayParams } from '@/types';
+
+export function* bubbleSort(
+  array: number[],
+): Generator<UpdateArrayParams, UpdateArrayParams, void> {
   const arr = [...array];
 
   const size = arr.length;
@@ -7,9 +11,9 @@ export function* bubbleSort(array: number[]) {
     for (let j = 0; j < size - 1 - i; j++) {
       if (arr[j] > arr[j + 1]) {
         [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
-        yield [...arr];
+        yield { array: [...arr], indices: [j + 1] };
       }
     }
   }
-  return arr;
+  return { array: [...arr], indices: [] };
 }

@@ -1,6 +1,9 @@
-export function* selectionSort(array: number[]) {
-  const arr = [...array];
+import { UpdateArrayParams } from '@/types';
 
+export function* selectionSort(
+  array: number[],
+): Generator<UpdateArrayParams, UpdateArrayParams, void> {
+  const arr = [...array];
   const size = arr.length;
 
   for (let i = 0; i < size - 1; i++) {
@@ -11,8 +14,8 @@ export function* selectionSort(array: number[]) {
       }
     }
     [arr[i], arr[min_idx]] = [arr[min_idx], arr[i]];
-    yield [...arr];
+    yield { array: [...arr], indices: [i, min_idx] };
   }
 
-  return arr;
+  return { array: [...arr], indices: [] };
 }

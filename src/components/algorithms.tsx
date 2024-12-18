@@ -5,6 +5,7 @@ import { FaStop } from 'react-icons/fa6';
 
 import { useArray } from '@/hooks/useArray';
 import { useSpeed } from '@/hooks/useSpeed';
+import { UpdateArrayParams } from '@/types';
 import { bubbleSort } from '@/util/bubble-sort';
 import { heapSort } from '@/util/heap-sort';
 import { insertionSort } from '@/util/insertion-sort';
@@ -18,29 +19,36 @@ export const Algorithms = () => {
   const [isRunning, setIsRunning] = useState(false);
   const { array, updateArray } = useArray();
   const { speed } = useSpeed();
-  const generatorRef = useRef<Generator<number[], number[], void>>(null);
+  const generatorRef =
+    useRef<Generator<UpdateArrayParams, UpdateArrayParams, void>>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const sort = (
-    sorter: (array: number[]) => Generator<number[], number[], unknown>,
+    sorter: (
+      array: number[],
+    ) => Generator<UpdateArrayParams, UpdateArrayParams, void>,
   ) => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
     if (generatorRef.current) {
-      generatorRef.current.return;
+      generatorRef.current.return({ array, indices: [] });
     }
 
     generatorRef.current = sorter(array);
 
     intervalRef.current = setInterval(() => {
-      const { value, done } = generatorRef.current!.next();
+      const {
+        value: { array, indices },
+        done,
+      } = generatorRef.current!.next();
       if (done) {
         setIsRunning(false);
+        updateArray({ array, indices });
         clearInterval(intervalRef.current!);
       } else {
         setIsRunning(true);
-        updateArray(value);
+        updateArray({ array, indices });
       }
     }, speed); // Adjust the interval time as needed
   };
@@ -48,11 +56,12 @@ export const Algorithms = () => {
   const stop = () => {
     if (intervalRef.current) {
       setIsRunning(false);
+      updateArray({ indices: [] });
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
     if (generatorRef.current) {
-      generatorRef.current.return;
+      generatorRef.current.return({ array, indices: [] });
       generatorRef.current = null;
     }
   };

@@ -22,9 +22,7 @@ export const metadata: Metadata = {
   description: 'Visualize sorting algorithms in real-time',
 };
 
-interface RootLayoutprops extends PropsWithChildren {}
-
-const RootLayout = ({ children }: RootLayoutprops) => {
+const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <html lang='en' suppressHydrationWarning>
       <body

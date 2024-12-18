@@ -1,11 +1,13 @@
+import { UpdateArrayParams } from '@/types';
+
 function* heapify(
   arr: number[],
   n: number,
   i: number,
-): Generator<number[], void, void> {
+): Generator<UpdateArrayParams, void, void> {
   let largest = i;
-  let l = 2 * i + 1;
-  let r = 2 * i + 2;
+  const l = 2 * i + 1;
+  const r = 2 * i + 2;
 
   if (l < n && arr[l] > arr[largest]) {
     largest = l;
@@ -17,14 +19,16 @@ function* heapify(
 
   if (largest !== i) {
     [arr[i], arr[largest]] = [arr[largest], arr[i]];
-    yield [...arr];
+    yield { array: [...arr], indices: [i, largest] };
 
     yield* heapify(arr, n, largest);
   }
 }
 
-function* heapSortHelper(arr: number[]): Generator<number[], void, void> {
-  let n = arr.length;
+function* heapSortHelper(
+  arr: number[],
+): Generator<UpdateArrayParams, void, void> {
+  const n = arr.length;
 
   for (let i = Math.floor(n / 2) - 1; i >= 0; i--) {
     yield* heapify(arr, n, i);
@@ -32,16 +36,18 @@ function* heapSortHelper(arr: number[]): Generator<number[], void, void> {
 
   for (let i = n - 1; i > 0; i--) {
     [arr[0], arr[i]] = [arr[i], arr[0]];
-    yield [...arr];
+    yield { array: [...arr], indices: [0, i] };
 
     yield* heapify(arr, i, 0);
   }
 }
 
-function* heapSort(array: number[]) {
+function* heapSort(
+  array: number[],
+): Generator<UpdateArrayParams, UpdateArrayParams, void> {
   const arr = [...array];
   yield* heapSortHelper(arr);
-  return arr;
+  return { array: [...arr], indices: [] };
 }
 
 export { heapSort };

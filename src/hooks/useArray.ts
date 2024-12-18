@@ -1,10 +1,13 @@
 import { create } from 'zustand';
 
+import { UpdateArrayParams } from '@/types';
+
 interface ArrayStoreProps {
   size: number;
   array: number[];
+  currentIndices: number[];
   setArray: (size: number) => void;
-  updateArray: (array: number[]) => void;
+  updateArray: (params: UpdateArrayParams) => void;
 }
 
 function shuffleArray(array: number[]): number[] {
@@ -18,6 +21,7 @@ function shuffleArray(array: number[]): number[] {
 export const useArray = create<ArrayStoreProps>(set => ({
   size: 50,
   array: [],
+  currentIndices: [],
   setArray: (size: number) =>
     set({
       size,
@@ -25,5 +29,9 @@ export const useArray = create<ArrayStoreProps>(set => ({
         Array.from({ length: size }, (_, index) => index + 1),
       ),
     }),
-  updateArray: (array: number[]) => set({ array }),
+  updateArray: ({ array, indices }: UpdateArrayParams) =>
+    set(state => ({
+      array: array ?? state.array,
+      currentIndices: indices ?? state.currentIndices,
+    })),
 }));
