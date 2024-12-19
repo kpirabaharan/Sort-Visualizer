@@ -19,12 +19,12 @@ export const BarChart = () => {
   // Scaling function to map array values to a height value between 1 and 250 pixels
   const scaleHeight = (value: number) => {
     const minHeight = 1;
-    const maxHeight = 256;
+    const maxHeight = 384;
     return (value / maxValue) * (maxHeight - minHeight) + minHeight;
   };
 
   return (
-    <div className='flex h-64 w-full items-end'>
+    <div className='flex h-96 w-full items-end'>
       {array.map((value, idx) => (
         <div
           key={idx}
